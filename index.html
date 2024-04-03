@@ -1,11 +1,1375 @@
-<html>
-  <head>
-     <title>
-    dfstrh
-  </title>
-  </head>
-  <h1>fgehgui</h1>
-  <h2>
-    dfrtjheriaswudr
-  </h2>
+<?php
+
+session_start();
+
+// Database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "fyp-admin";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Check if the user is logged in
+if (isset($_SESSION['username'])) {
+    $welcomeMessage = $_SESSION['username']. " "."Welcome, "  . " to Carmen's Travel Adventures!";
+} else {
+    // If the user is not logged in, you can provide a general welcome message
+    $welcomeMessageNotlogin = "Welcome to Carmen's Travel Adventures! <br><br><br>We\'re delighted to have you here. Explore our tailored journeys, exquisite getaways, and dream escapes for a memorable travel experience.";
+}
+
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <!-- <link href="css/home_style.css" rel="stylesheet" type="text/css"/> -->
+
+    <style>
+body {
+    background: linear-gradient(to right, #ffe6cc, #ffb3d9);
+    margin: 0;
+    padding: 0;
+    margin-bottom: 60px;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 50px 30px 70px 30px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+    height: 100%;
+}
+
+
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    overflow: hidden;
+    background: linear-gradient(to right, #ffd9bf, #ff91b3); /* Slightly darker colors */
+    border: 4px solid #ff91b3;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 15px #888888; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 2px;
+    margin: 0 auto; 
+    border-radius: 35px 10px 50px 10px;
+    width: 100%;
+}
+
+.navbar .logout-link {
+    margin-left: auto; /* Push the logout link to the right */
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 14px 22px;
+}
+
+.navbar a {
+            float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 22px; 
+    font-size: 17px; 
+    text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .navbar .dropdown {
+            float: left;
+            overflow: hidden;
+            font-size: 18px; 
+    padding: 10px 12px; 
+        }
+
+        .navbar .dropdown .dropbtn {
+            font-size: 16px;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 14px 16px;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+        }
+
+        .navbar .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            z-index: 1;
+            padding: 2px 5px;
+        }
+
+/* 
+        .navbar .dropdown-content a {
+            float: none;
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        } */
+
+        .navbar .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .navbar .dropdown:hover .dropdown-content {
+            display: block;
+            background-color: #333;
+        }
+
+        .image-container-logo {
+            float: left;
+            padding: 10px;
+        }
+
+        .navbar img {
+            height: auto;
+            width: 160px;
+            display: block; 
+            margin: 0 auto;
+        }
+      
+
+        /* Style for the search form */
+.search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style for the search input */
+.search-input {
+    padding: 5px; 
+    font-size: 12px; 
+    border: 4px solid #ccc; 
+    border-radius: 5px; 
+}
+
+/* Style for the search button */
+.search-form input[type="submit"] {
+    padding: 7px 11px; 
+    font-size: 12px; 
+    background-color: #4CAF50; 
+    color: white; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer; 
+}
+
+/* Hover effect for the search button */
+.search-form input[type="submit"]:hover {
+    background-color: #45a049; 
+}
+
+
+.image-container-logo {
+    text-align: center;
+    width: 160px;
+    margin: 25px; 
+    height: auto; 
+}
+
+
+img {
+    height: auto;
+    width: 160px;
+    display: block; 
+    margin: 0 auto; 
+}
+/* Style for navigation button hover */
+/* .prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+} */
+
+
+.login-register {
+    margin-right: 10px;
+}
+
+.login-register a {
+    color: white;
+    text-decoration: none;
+    margin-left: 10px; 
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+.customized-travel-container {
+    text-align: center;
+    background-color: #ffc3a0;
+    padding: 10px;
+    color: brown;
+    border: 5px solid #ffb88c;
+    border-radius: 20px 10px 30px 10px;
+    margin: 5px auto;
+    max-width: 450px;
+    width: 400px;
+    height: 340px;
+}
+
+
+    .customized-travel-heading h2 {
+        font-size: 25px;
+        margin-bottom: 0px;
+        font-weight: bold;
+        font-family: 'Consolas', Monospace;
+    }
+
+    .customized-travel-heading p {
+        font-size: 19px;
+        margin-bottom: 0; 
+        font-family: 'Impact', fantasy;
+    }
+
+    .customized-travel-description p {
+        font-size: 14px;
+        margin-bottom: 0px;
+        font-family: 'Arial', Sans-Serif ;
+    }
+ 
+    .another-custom-container {
+        text-align: center;
+        background-color: #ffc3a0;
+        padding: 0px;
+        color: brown; 
+        border: 5px solid #ffb88c; 
+        border-radius: 8px; 
+        margin: 5px auto; 
+       height: 120px;
+        max-width: 390px; 
+        width: 400px;
+        height: 310px;
+        border-radius: 20px 10px 30px 10px; 
+}
+
+.another-custom-heading h2 {
+    font-size: 25px;
+        margin-bottom: 0px;
+        font-weight: bold; 
+        font-family: 'Consolas', Monospace;
+}
+
+.another-custom-heading p {
+    font-size: 19px;
+        margin-bottom: 0; 
+        font-family: 'Impact', fantasy;
+}
+
+.another-custom-description p {
+    font-size: 14px;
+        margin-bottom: 0px;
+        font-family: 'Arial', Sans-Serif ;
+}
+
+.third-custom-container {
+    text-align: center;
+        background-color: #ffc3a0; 
+        padding: 0px;
+        color: brown; 
+        border: 5px solid #ffb88c;
+        border-radius: 8px; 
+        margin: 5px auto;
+       height: 120px;
+        max-width: 390px;
+        width: 400px;
+    height: 310px;
+        border-radius: 20px 10px 30px 10px; 
+}
+
+.third-custom-heading h2 {
+    font-size: 25px;
+        margin-bottom: 0px;
+        font-weight: bold; 
+        font-family: 'Consolas', Monospace;
+}
+
+.third-custom-heading p {
+    font-size: 19px;
+        margin-bottom: 0; 
+        font-family: 'Impact', fantasy;
+}
+
+.third-custom-description p {
+    font-size: 14px;
+        margin-bottom: 0px;
+        font-family: 'Arial', Sans-Serif ;
+}
+
+.slideshow-container {
+    position: relative;
+    margin: auto;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    width: 970px;
+    height: 500px;
+    border-radius: 35px 10px 50px 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Dark shadow effect */
+}
+
+
+
+.slideshow-container img {
+    width: 970px;
+    height: 500px;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slideshow-container img:hover {
+    transform: scale(1.1); /* Enlarge the image on hover */
+}
+
+
+.mySlides {
+    display: none;
+    width: 900px;
+    height:600px;
+    object-fit: cover; 
+}
+
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+}
+
+.prev {
+    left: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+/* Style for navigation button hover */
+.prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.reflection::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.3) 100%);
+        transform: scaleY(-1);
+        transition: transform 0.5s ease-in-out;
+    }
+  
+  .header {
+    border-radius: 35px 10px 50px 10px; 
+    color: #fff;
+    padding: 80px; 
+    text-align: center;
+    margin-top: auto;
+    overflow: hidden;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+    margin-bottom: 0; 
+}
+
+.footer {
+    background: linear-gradient(to right, #ffd9bf, #ff91b3);
+    color: #fff;
+    padding: 16px 20px; 
+    text-align: center;
+    border: 4px solid #d871a8; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 0 15px #888888; 
+    overflow: hidden;
+    border-radius: 35px 10px 50px 10px;
+    align-items: center;
+    justify-content: space-around;
+    display: flex;
+    width: 96%;
+    margin-top: auto;
+}
+
+
+.contact-us,
+.quick-links,
+.feedback {
+    flex: 1;
+    color: #333;
+}
+.contact-us p {
+    color: #fff; 
+}
+
+.footer.contact-us h3,
+.footer.quick-links h3,
+.footer.feedback h3 {
+    margin-bottom: 10px;
+    font-weight: bold;
+    color:#333
+}
+
+.quick-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.quick-links li {
+    margin-bottom: 8px;
+}
+
+.quick-links a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.quick-links a:hover {
+    text-decoration: underline;
+    color: #FF0000; 
+}
+
+/* Basic styling for the submit button */
+input[type="submit"] {
+  background-color: #4CAF50; 
+  color: white; 
+  padding: 10px 20px;
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer; 
+}
+
+/* Hover effect */
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.copyright {
+    text-align: center;
+    margin-top: auto; 
+}
+
+.image-container-travel {
+      float: right; /* Float the travel image to the right */
+      width: 130px;
+      margin: 25px;
+      height: auto;
+      position: relative; /* Ensure z-index works */
+      z-index: -1; /* Move it behind the logo */
+      margin-top: 120px;
+    }
+
+    .image-container-travel img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); 
+    margin-top: 10px; 
+    margin-bottom: 10px; 
+    position: relative;
+}
+
+/* Reflection effect */
+.image-container-travel img::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%; /* Adjust the height of the reflection */
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)); /* Darker reflection color */
+}
+
+.image-container-travel h1{
+    font-size: 13px;
+}
+
+    #welcome-message,
+    #welcome-message-notlogin {
+    background-color: #888888;
+    color: white;
+    padding: 20px;
+    position: relative; /* Change to relative */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    transition: all 0.5s ease;
+    width: 65%;
+    height: 8.7%;
+    box-sizing: border-box;
+    margin-top: -60px; /* Adjust this value based on your navbar height */
+    border-radius: 15px; /* Add border-radius for rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add box shadow for depth effect */
+}
+
+#welcome-message.small,
+#welcome-message-notlogin .small {
+    padding: 10px;
+}
+
+/* Reflection effect */
+#welcome-message::after,
+#welcome-message-notlogin ::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%; 
+    background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.8)); 
+    border-radius: 0 0 15px 15px; 
+}
+
+#welcome-message h2 {
+    font-size: 25px;
+    margin-bottom: 10px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+#welcome-message p {
+    font-size: 20px; 
+    line-height: 1.6;
+    animation: fadeIn 1s ease-in-out;
+}
+
+#welcome-message-notlogin p {
+    font-size: 24px; 
+    line-height: 1.6;
+    animation: fadeIn 1s ease-in-out;
+}
+
+#welcome-message-notlogin p {
+    font-size: 16px; 
+    line-height: 1.6;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Define animation keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+#welcome-message h2:hover,
+#welcome-message p:hover {
+    animation: hoverEffect 0.5s ease-in-out;
+}
+
+/* Define animation keyframes for hover effect */
+@keyframes hoverEffect {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+
+.website_view {
+    float:left;
+    top: 60%;
+    margin-top: 170px;
+    left: 0;
+    transform: translateY(-50%);
+    text-align: center;
+    background-color: #ffffff; 
+    padding: 10px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add box shadow */
+    border-radius: 5px;
+}
+
+.dropdown{
+    z-index: 9999;
+}
+
+/* CSS for star rating */
+.rating {
+  display: inline-block;
+}
+
+.star {
+  cursor: pointer;
+  font-size: 30px;
+  color: #ddd;
+}
+
+.star.selected {
+  color: #ffd700;
+}
+
+.whatapps_chat {
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    color: #ccc;
+    z-index: 999; /* Ensure it's above other content */
+    margin-bottom: 90px;
+    margin-right: 10px;
+}
+
+.whatapps_chat a {
+    display: block;
+    width: 70px; /* Adjust width as needed */
+    height: 70px; /* Adjust height as needed */
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #fff; /* White border */
+    border-radius: 50%; /* Rounded shape */
+    transition: all 0.3s ease; /* Smooth transition for all properties */
+}
+
+.whatapps_chat img {
+    width: 100%;
+    height: auto;
+}
+
+/* Hover effect */
+.whatapps_chat:hover a {
+    transform: scale(1.1); /* Scale up the button on hover */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Add shadow effect */
+}
+
+/* Text inside button */
+.whatapps_chat::after {
+    content: 'Chat with Us'; /* Text to display on hover */
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8); /* Background color for text */
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    opacity: 0; /* Initially transparent */
+    transition: opacity 0.3s ease; /* Smooth transition for opacity */
+}
+
+/* Hover effect for text */
+.whatapps_chat:hover::after {
+    opacity: 1; /* Show the text on hover */
+}
+
+.contact-us a {
+    color: #007bff; /* Change to your preferred color */
+    text-decoration: none; /* Remove underline */
+    padding: 5px 10px; /* Add padding */
+    border: 1px solid #007bff; /* Add border */
+    border-radius: 5px; /* Add border radius */
+    display: inline-block; /* Ensure it behaves as a block */
+    transition: all 0.3s ease; /* Add transition for smooth effect */
+}
+
+.contact-us a:hover {
+    background-color: #007bff; /* Change background color on hover */
+    color: #fff; /* Change text color on hover */
+}
+
+/* Style for Google Translate element container */
+.google-translate-container {
+    position: relative;
+    margin-right: 70px; /* Add right margin for positioning */
+    text-align: right; /* Align the content to the right */
+}
+
+
+
+/* Style for the border shape */
+.google-translate-container::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%; /* Adjust to move the shape to the right */
+    margin-top: -10px;
+    border-width: 9px;
+    border-style: solid;
+    border-color: transparent transparent transparent #ccc; /* Adjust to change the direction of the border */
+}
+
+/* Style for Google Translate element container */
+#google_translate_element {
+    display: inline-block; /* Display as inline-block */
+    margin-top: 20px; 
+    padding: 10px; /* Add padding for content */
+    background-color: #fff; /* Background color */
+    border-radius: 5px; /* Border radius */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+}
+
+/* Style for Google Translate dropdown */
+.goog-te-combo {
+    width: auto !important; /* Adjust width as needed */
+    font-size: 16px; /* Adjust font size as needed */
+    border: none; /* Remove default border */
+    background-color: #fff; /* Background color */
+    color: #333; /* Text color */
+    padding: 8px 15px; /* Add padding */
+    border-radius: 20px; /* Border radius */
+    cursor: pointer; /* Cursor style */
+    position: relative; /* Position relative for pseudo-element */
+    overflow: hidden; /* Hide overflow */
+}
+
+/* Style for Google Translate dropdown options */
+.goog-te-menu-value {
+    padding: 5px; /* Padding */
+    background-color: #fff; /* Background color */
+    color: #333; /* Text color */
+}
+
+/* Style for Google Translate dropdown option on hover */
+.goog-te-menu-value:hover {
+    background-color: #f2f2f2; /* Hover background color */
+    cursor: pointer; /* Cursor style */
+}
+
+/* Pseudo-element for creating border effect */
+.goog-te-combo::after {
+    content: ''; /* Empty content */
+    position: absolute; /* Position absolute */
+    top: 0; /* Align to top */
+    right: 0; /* Align to right */
+    bottom: 0; /* Align to bottom */
+    left: 0; /* Align to left */
+    border-radius: 20px; /* Border radius */
+    border: 2px solid #4CAF50; /* Border color and width */
+    pointer-events: none; /* Disable pointer events */
+    transition: all 0.3s ease; /* Transition effect */
+}
+
+/* Hover effect for pseudo-element */
+.goog-te-combo:hover::after {
+    transform: scale(1.1); /* Scale effect on hover */
+}
+
+
+/* Style for powered by text */
+.powered-by {
+    display: inline-block; /* Display as inline-block */
+    font-size: 9px; /* Adjust font size as needed */
+    margin-left: 5px; /* Adjust margin as needed */
+    color: #666; /* Text color */
+}
+
+#switch-to-english {
+    background-color: #ffffff; /* Button background color */
+    color: #333333; /* Button text color */
+    border: 2px solid #333333; /* Button border */
+    border-radius: 5px; /* Button border radius */
+    padding: 10px 20px; /* Button padding */
+    font-size: 16px; /* Button font size */
+    cursor: pointer; /* Cursor style */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition effect */
+    width:15%;
+}
+
+#switch-to-english:hover {
+    background-color: #333333; /* Button background color on hover */
+    color: #ffffff; /* Button text color on hover */
+}
+
+/* country quick box  */
+.country-container {
+    display: flex;
+    max-width: 99.5%;
+    text-align: center;
+    max-height: 50%;
+    margin-top: 20px;
+}
+
+.country-box {
+    position: relative;
+    width: 405px; 
+    height: 220px; 
+    overflow: hidden;
+    border-radius: 10px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+    margin: 7px;
+    transition: box-shadow 0.3s ease; 
+}
+
+.country-box img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+}
+
+.country-box .overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        padding: 8px;
+        font-size: 16px;
+        transition: bottom 0.3s ease-in-out;
+    }
+
+.country-box:hover {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); 
+    transform: translateY(-7px);
+}
+
+.country-box:hover img {
+    transform: scale(1.1); 
+}
+
+.country-box:hover .overlay {
+    opacity: 1; 
+    bottom: -50px;
+}
+.overlay:hover {
+    transform: translateY(-5px);
+}
+
+h4 {
+        font-size: 24px; /* Adjust font size */
+        color: #2196F3; /* Set text color to blue */
+        text-align: center; /* Center align text */
+        margin-bottom: 20px; /* Add some bottom margin */
+        text-transform: uppercase; /* Convert text to uppercase */
+        letter-spacing: 2px; /* Add letter spacing */
+        transition: color 0.3s ease; /* Smooth color transition */
+    }
+
+    /* Hover effect */
+    h4:hover {
+        color: #0D47A1; /* Change text color on hover */
+        cursor: pointer; /* Change cursor to pointer on hover */
+    }
+
+/* Style the heading */
+.special-effect {
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth transition for color and transform */
+    cursor: pointer; /* Change cursor to pointer */
+    font-size: 20px; /* Adjust the font size */
+    font-weight: bold; /* Make the font bold */
+}
+
+/* Style the description */
+.customized-travel-description p,
+.another-custom-description p,
+.third-custom-description p {
+    font-size: 15px; /* Adjust the font size */
+    line-height: 1.5; /* Set the line height */
+    margin-bottom: 20px; /* Add bottom margin */
+    color: #333; /* Set paragraph color */
+}
+
+/* Define the hover effect */
+.special-effect:hover {
+    color: red; /* Change color to red on hover */
+    transform: scale(1.1); /* Scale up on hover */
+    animation: shake 0.5s infinite alternate; /* Apply shake animation on hover */
+}
+
+/* Define the shake animation */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+</style>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</head>
+<body>
+    
+<div class="google-translate-container">
+<div id="google_translate_element"></div>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL}, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</div>
+<br>
+<div class="google-translate-container">
+    <button id="switch-to-english">Switch back to English</button>
+</div>
+
+<!-- change back to english language -->
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+        }, 'google_translate_element');
+    }
+
+    // Function to switch back to English
+    function switchToEnglish() {
+        var dropdown = document.querySelector('.goog-te-combo');
+        var options = dropdown.querySelectorAll('option');
+        // Find the English option and set it as selected
+        options.forEach(function(option) {
+            if (option.text === 'English') {
+                option.selected = true;
+            }
+        });
+        // Trigger change event to apply the language switch
+        dropdown.dispatchEvent(new Event('change'));
+    }
+
+    document.getElementById('switch-to-english').addEventListener('click', switchToEnglish);
+</script>
+
+
+    <script>
+        // Function to close the welcome message and store the information in local storage
+        function closeWelcomeMessage() {
+            document.getElementById('welcome-message').style.display = 'none';
+            localStorage.setItem('welcomeShown', 'true');
+        }
+
+        // Function to check if the welcome message has been shown before
+        function checkWelcomeMessage() {
+            if (!localStorage.getItem('welcomeShown')) {
+                // If not shown, display the welcome message
+                document.getElementById('welcome-message').style.display = 'block';
+            }
+        }
+
+        // Call the function on page load
+        document.addEventListener("DOMContentLoaded", checkWelcomeMessage);
+    </script>
+
+<div id="scroll-down-section">
+    <div class="header">
+        <div class="navbar">
+            <div class="image-container-logo">
+                <img src="logo.png" alt="Logo">
+            </div>index.html">Home Page</a>
+            <a href="aboutus.php">About us</a>
+            <div class="dropdown">
+                <button class="dropbtn">Packages 
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="hongkong-package.php">Hong Kong</a>
+                    <a href="japan-package.php">Japan</a>
+                    <a href="newzealand-package.php">New Zealand</a>
+                    <a href="taiwan-package.php">Taiwan</a>
+                    <a href = "thailand-package.php">Thailand</a>
+                    <a href = "southkorea-package.php">South Korea</a>
+                </div>
+            </div>
+            <a href="term&condition.php">Term and Condition</a>
+           
+            <br><br><br>
+          
+<div class="search-container">
+    <div class="search-form">
+    <form action="search_products.php" method="GET" class="search-form">
+                <input type="text" name="search" placeholder="Search products..." class="search-input">
+                <input type="submit" value="Search">
+            </form>
+    </div>
+</div>
+            <nav>
+                <a href="userprofile.php" class="profile-link">Profile</a>
+            </nav>
+            <?php
+        // Check if the user is logged in
+        if (isset($_SESSION['username'])) {
+            // If logged in, display a logout link
+            echo '<a href="userlogout_nav.php?redirect=homepage.php">Logout</a>';
+        } else {
+            // If not logged in, display a login/register link
+            echo '<div class="login-register">';
+            echo '<a href="userlogin.php">Login</a>';
+            echo '</div>';
+        }
+        ?>
+
+        </div>
+    </div>
+
+    <?php
+// Display the welcome message box
+if (!isset($_SESSION['username'])) {
+    // If the user is not logged in, show a general welcome message
+    echo '<div id="welcome-message-notlogin">';
+    echo '<h2>' . $welcomeMessageNotlogin . '</h2>';
+    echo '</div>';
+} else {
+    // If the user is logged in, show a personalized welcome message
+    echo '<div id="welcome-message">';
+    echo '<h2>' . $welcomeMessage . '</h2>';
+    echo'<br>';
+    echo '<p>We are delighted to have you here. Explore our tailored journeys, exquisite getaways, and dream escapes for a memorable travel experience.</p>';
+    echo '</div>';
+}
+?>
+
+<br>
+    <div class="slideshow-container">
+        <?php include 'slideshow.php'; ?>
+        
+    </div>
+<br><br><br><br><br>
+
+<div class="container">
+    <div class="customized-travel-container">
+        <div class="customized-travel-heading">
+            <h2 class="special-effect">Tailored Journeys</h2> <!-- Apply special effect class -->
+            <p>Crafted with Care</p>
+        </div>
+        <div class="customized-travel-description">
+            <p>Embark on a journey like no other with our meticulously customized travel experiences. Our dedicated team of experts ensures that every aspect of your trip aligns seamlessly with  your travel style and budget. <br> From handcrafted itineraries to personalized services, indulge in a travel experience that reflects your unique preferences and passions. Explore the pinnacle of personalization and unveil a world of extraordinary adventures, exclusively designed to suit you. <br>Your personalized travel awaits—discover the art of bespoke exploration with us.</p>       
+        </div>
+    </div>
+
+    <div class="another-custom-container">
+        <div class="another-custom-heading">
+            <h2 class="special-effect">Exquisite Getaways</h2> <!-- Apply special effect class -->
+            <p>Crafted with Elegance</p>
+        </div>
+        <div class="another-custom-description">
+            <p>Embark on a journey of refined luxury with our meticulously curated travel experiences. Our dedicated team of experts ensures that every detail of your trip<br> is designed with utmost elegance and sophistication. From bespoke itineraries to tailored services, immerse yourself in a travel experience that embodies<br> opulence and sophistication. Discover the epitome of refined exploration, exclusively designed to provide you with unforgettable getaways.</p>
+        </div>
+    </div>
+
+    <div class="third-custom-container">
+        <div class="third-custom-heading">
+            <h2 class="special-effect">Dream Escapes</h2> <!-- Apply special effect class -->
+            <p>Crafted with Dreaminess</p>
+        </div>
+        <div class="third-custom-description">
+            <p>Embark on a dreamy journey with our thoughtfully designed travel escapes. Our imaginative team of experts ensures that every aspect of your trip<br> is filled with enchantment and dreaminess. From whimsical itineraries to magical services, immerse yourself in a travel experience that embodies<br> fantasy and wonder. Unveil a world of dreamy exploration, exclusively designed to provide you with extraordinary escapes.</p>
+        </div>
+    </div>
+</div>
+    <br><br><br><br><br>
+    
+    <!-- quick to country -->
+    <?php
+// Database connection
+$mysqli = new mysqli("localhost", "root", "", "fyp-admin");
+
+// Check connection
+if ($mysqli->connect_errno) {
+    echo "Failed to connect to MySQL: " . $mysqli->connect_error;
+    exit();
+}
+
+// Array of countries to filter
+$countries = ["Hong Kong", "Taiwan", "Japan", "New Zealand", "Thailand","South Korea"];
+
+// Initialize an array to store randomly selected image URLs for each country
+$countryImages = [];
+
+// Loop through each country
+foreach ($countries as $country) {
+    // Generate column names from img1 to img10
+    $imgColumns = implode(",", array_map(function ($i) {
+        return "img$i";
+    }, range(1, 10)));
+
+    // Query to fetch a random image URL from the package table for the selected country
+    $query = "SELECT $imgColumns FROM package WHERE country = ? ORDER BY RAND() LIMIT 1";
+    $stmt = $mysqli->prepare($query);
+    $stmt->bind_param("s", $country);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Check if at least one image is found for the selected country
+    if ($result->num_rows > 0) {
+        // Fetch the row
+        $row = $result->fetch_assoc();
+
+        // Randomly select one of the image URLs from img1 to img10
+        $randomImageIndex = mt_rand(1, 10);
+        $countryImages[$country] = $row["img$randomImageIndex"];
+    } else {
+        // Set default image URL for the country
+        switch ($country) {
+            case "Japan":
+                $countryImages[$country] = "japan.png";
+                break;
+            case "Hong Kong":
+                $countryImages[$country] = "hongkong.png";
+                break;
+            case "Taiwan":
+                $countryImages[$country] = "taiwan.png";
+                break;
+            case "New Zealand":
+                $countryImages[$country] = "newzealand.png";
+                break;
+            case "Thailand":
+                $countryImages[$country] = "thailand.png";
+                break;
+            case "South Korea":
+                 $countryImages[$country] = "southkorea.jpg";
+                 break;
+            default:
+                $countryImages[$country] = "fallback.png";
+        }
+    }
+}
+
+$stmt->close();
+$mysqli->close();
+?>
+
+<center>
+    <h4>Explore Destinations</h4>
+    <div class="country-container">
+        <?php foreach ($countries as $country): ?>
+            <div class="country-box" onclick="navigateTo('<?php echo strtolower(str_replace(' ', '', $country)) ?>-package.php')">
+                <img src="travel/<?php echo $countryImages[$country] ?>" alt="<?php echo $country ?>" onmouseover="showFileName(this)" onmouseout="hideFileName(this)">
+                <div class="overlay"><?php echo $country ?></div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</center>
+
+<script>
+    function navigateTo(url) {
+        // Navigate to the specified URL
+        window.location.href = url;
+    }
+
+    function showFileName(img) {
+        var fileName = img.src.split("/").pop(); // Extract the file name from the image URL
+        img.setAttribute("title", fileName); // Set the file name as the title attribute
+    }
+
+    function hideFileName(img) {
+        img.removeAttribute("title"); // Remove the title attribute when mouseout
+    }
+</script>
+
+    <div class="image-container-travel">
+        <h1>Scan the QR code and seamlessly view the image on your mobile device for a convenient and user-friendly experience.</h1>
+    <img src="imgqrcode.png" alt="Travel Logo">
+  </div>
+
+  <br><br><br><br><br><br> <br><br><br><br><br><br><br>
+        <div class="website_view">
+        <?php
+
+        // Function to increment total views for the about us page
+        function incrementTotalViewsHomePage()
+        {
+            $totalViewsFile = 'total_views_homepage.txt'; // Unique file for the about us page
+
+            if (file_exists($totalViewsFile)) {
+                $currentTotalViews = (int) file_get_contents($totalViewsFile);
+                $currentTotalViews++;
+            } else {
+                $currentTotalViews = 1;
+            }
+
+            file_put_contents($totalViewsFile, $currentTotalViews);
+
+            return $currentTotalViews;
+        }
+
+        // Function to increment today views for the about us page
+        function incrementTodayViewsHomePage()
+        {
+            $todayViewsFile = 'today_views_homepage.txt'; // Unique file for today views of the about us page
+
+            if (file_exists($todayViewsFile)) {
+                $todayViews = json_decode(file_get_contents($todayViewsFile), true);
+            } else {
+                $todayViews = [];
+            }
+
+            $currentDate = date('Y-m-d');
+            if (isset($todayViews[$currentDate])) {
+                $todayViews[$currentDate]++;
+            } else {
+                $todayViews[$currentDate] = 1;
+            }
+
+            file_put_contents($todayViewsFile, json_encode($todayViews));
+
+            // Calculate total today views by summing up all views for today
+            $totalTodayViews = isset($todayViews[$currentDate]) ? $todayViews[$currentDate] : 0;
+
+            return $totalTodayViews;
+        }
+
+        // Example usage for the about us page:
+        $totalViews = incrementTotalViewsHomePage();
+        $todayViews = incrementTodayViewsHomePage();
+
+        echo "Today Views: $todayViews<br>";
+        echo "Total Views: $totalViews";
+
+        ?>
+        </div>
+
+<div class ="whatapps_chat">
+<a aria-label="Chat on WhatsApp" href="https://wa.me/182429382"> <img alt="Chat on WhatsApp" src="whatapps_img.png" />
+</a>
+</div>
+
+    <div class="footer">
+        <div class="image-container-logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+
+        <div class="contact-us">
+            <h3>Contact Us</h3>
+            <p>Email: <a href="mailto:carmenlau.trip@gmail.com">carmenlau.trip@gmail.com</a></p>
+            <p>Phone: <br> <a href="https://wa.me/182429382">WhatsApp Chat</a></p>
+        </div>
+
+            
+            <div class="quick-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="aboutus.php">About Us</a></li>
+                    <li><a href="term&condition.php">Terms and Conditions</a></li>
+                    <li><a href="userprofile.php">Profile</a></li>
+                </ul>
+            </div>
+
+                <div class="feedback">
+            <h3>Feedback</h3>
+            <!-- HTML form for submitting feedback and rating -->
+            <form action="feedback.php" method="post">
+            <label for="feedback">Comment:</label><br>
+                <textarea id="feedback" name="feedback" rows="4" cols="50" required></textarea><br>
+
+            <!-- Star rating -->
+            <label for="rating">Rating:</label><br>
+            <div class="rating" id="starRating">
+                <span class="star" data-value="1">&#9733;</span>
+                <span class="star" data-value="2">&#9733;</span>
+                <span class="star" data-value="3">&#9733;</span>
+                <span class="star" data-value="4">&#9733;</span>
+                <span class="star" data-value="5">&#9733;</span>
+            </div><br>
+
+            <input type="hidden" id="selectedRating" name="rating" value="">
+
+            <input type="submit" value="Submit Feedback">
+        </form>
+    </div>
+
+<script>
+    // JavaScript for star rating
+    document.addEventListener('DOMContentLoaded', function() {
+        const stars = document.querySelectorAll('.star');
+        const ratingInput = document.getElementById('selectedRating');
+
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                if (this.classList.contains('selected')) {
+                    // If the clicked star is already selected, unselect it
+                    ratingInput.value = '';
+                    this.classList.remove('selected');
+                } else {
+                    // Otherwise, select the clicked star
+                    ratingInput.value = value;
+                    resetStars();
+                    highlightStars(this);
+                }
+            });
+        });
+
+        function resetStars() {
+            stars.forEach(star => {
+                star.classList.remove('selected');
+            });
+        }
+
+        function highlightStars(clickedStar) {
+            const value = clickedStar.getAttribute('data-value');
+            for (let i = 0; i < value; i++) {
+                stars[i].classList.add('selected');
+            }
+        }
+    });
+</script>
+
+            <div class="copyright">
+                <p>© 2024 Carmen's Travel Adventures. All Rights Reserved.</p>
+            </div>
+        </div>
+</div>
+<!--Start of Tawk.to Script-->
+<!-- <script type="text/javascript">
+    var Tawk_API = Tawk_API || {};
+    var username = "<?php echo isset($_SESSION['username']) ? $_SESSION['username'] : ''; ?>"; // Retrieve the username of the logged-in user
+    Tawk_API.visitor = {
+        name: username // Set the username as the visitor's name
+    };
+    Tawk_API.onLoad = function() {
+        if (username) {
+            Tawk_API.setAttributes({
+                'email': username + '@example.com', // Set a dummy email address using the username for identification
+                'username': username // Set the username as a custom attribute for further identification if needed
+            });
+        }
+    };
+    (function() {
+        var s1 = document.createElement("script"),
+            s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/66078be11ec1082f04dce503/1hq6nkquf';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
+</script> -->
+<!--End of Tawk.to Script-->
+
+</body>
+
 </html>
